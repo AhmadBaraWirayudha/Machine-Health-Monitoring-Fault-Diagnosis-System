@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Technical Report — {{ report_title }}</title>
+  <style>
+    :root {
+      --primary:  #2c3e50;
+      --accent:   #2980b9;
+      --good:     #27ae60;
+      --warning:  #f39c12;
+      --degraded: #e67e22;
+      --critical: #c0392b;
+      --bg:       #f8f9fa;
+      --border:   #dee2e6;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #333; }
+
+    /* ── Cover ── */
+    .cover {
+      background: var(--primary);
+      color: white;
+      padding: 60px 80px;
+      min-height: 220px;
+    }
+    .cover h1 { font-size: 2rem; margin-bottom: 8px; }
+    .cover .subtitle { font-size: 1.1rem; opacity: 0.75; margin-bottom: 24px; }
+    .cover-meta { display: flex; gap: 40px; font-size: 0.9rem; opacity: 0.85; }
+    .cover-meta span b { display: block; font-size: 0.75rem; text-transform: uppercase;
+                         letter-spacing: .05em; opacity: .7; margin-bottom: 2px; }
+
+    /* ── Layout ── */
+    .container { max-width: 1050px; margin: 0 auto; padding: 40px 30px 60px; }
+    section { margin-bottom: 48px; }
+    h2 { font-size: 1.35rem; color: var(--primary); border-bottom: 2px solid var(--accent);
+         padding-bottom: 6px; margin-bottom: 18px; }
+    h3 { font-size: 1.1rem; color: var(--primary); margin: 20px 0 10px; }
+    p  { line-height: 1.7; margin-bottom: 10px; color: #444; }
+    ul { padding-left: 20px; }
+    li { margin: 5px 0; line-height: 1.6; }
+
+    /* ── KPI cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+    .kpi-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: 8px; padding: 22px 20px; text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,.05);
+    }
+    .kpi-card .value { font-size: 2.2rem; font-weight: 700; color: var(--accent); }
+    .kpi-card .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: .06em;
+                        color: #888; margin-top: 4px; }
+
+    /* ── Status badges ── */
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 20px;
+      font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+    }
+    .badge-good     { background: #d5f5e3; color: var(--good); }
+    .badge-warning  { background: #fdebd0; color: var(--warning); }
+    .badge-degraded { background: #fce5cd; color: var(--degraded); }
+    .badge-critical { background: #fadbd8; color: var(--critical); }
+
+    /* ── Tables ── */
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;
+            border-radius: 6px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+    thead { background: var(--primary); color: white; }
+    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    tbody tr:hover { background: #f0f7ff; }
+
+    /* ── Plots ── */
+    .plot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .plot-box { background: white; border: 1px solid var(--border); border-radius: 8px;
+                padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.05); }
+    .plot-box img { width: 100%; border-radius: 4px; }
+    .plot-box figcaption { font-size: 0.82rem; color: #777; text-align: center; margin-top: 8px; }
+
+    /* ── Findings ── */
+    .finding {
+      border-left: 4px solid var(--accent); background: white;
+      padding: 14px 18px; margin-bottom: 16px; border-radius: 0 6px 6px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    }
+    .finding.critical  { border-color: var(--critical); }
+    .finding.warning   { border-color: var(--warning); }
+    .finding.good      { border-color: var(--good); }
+    .finding h4 { margin-bottom: 4px; font-size: 0.95rem; }
+    .finding p  { margin: 0; font-size: 0.88rem; color: #555; }
+
+    /* ── Footer ── */
+    footer { text-align: center; padding: 30px; font-size: 0.8rem; color: #aaa;
+             border-top: 1px solid var(--border); margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <h1>{{ report_title }}</h1>
+  <p class="subtitle">Condition Monitoring Technical Report</p>
+  <div class="cover-meta">
+    <span><b>Prepared by</b>{{ author }}</span>
+    <span><b>Date</b>{{ report_date }}</span>
+    <span><b>Asset / Machine</b>{{ asset_name }}</span>
+    <span><b>Report ID</b>{{ report_id }}</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 1. EXECUTIVE SUMMARY -->
+  <section id="executive-summary">
+    <h2>1. Executive Summary</h2>
+    <p>{{ executive_summary }}</p>
+
+    <div class="kpi-grid" style="margin-top:20px;">
+      <div class="kpi-card">
+        <div class="value">{{ total_assets }}</div>
+        <div class="label">Assets Monitored</div>
+      </div>
+      <div class="kpi-card">
+        <div class="value">{{ total_inspections }}</div>
+        <div class="label">Inspections Conducted</div>
+      </div>
+      <div class="kpi-card">
+        <div class="value" style="color:var(--critical);">{{ critical_count }}</div>
+        <div class="label">Critical Assets</div>
+      </div>
+      <div class="kpi-card">
+        <div class="value" style="color:var(--warning);">{{ open_recommendations }}</div>
+        <div class="label">Open Actions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="value" style="color:var(--good);">{{ avg_health_score }}%</div>
+        <div class="label">Fleet Health Score</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. METHODOLOGY -->
+  <section id="methodology">
+    <h2>2. Methodology</h2>
+
+    <h3>2.1 Data Source</h3>
+    <p>{{ data_source_description }}</p>
+
+    <h3>2.2 Feature Extraction</h3>
+    <p>Diagnostic features were extracted from sensor readings using both time-domain and frequency-domain methods:</p>
+    <ul>
+      <li><b>RMS</b> — Root Mean Square: overall vibration energy level</li>
+      <li><b>Kurtosis</b> — impulsive content; elevated values indicate bearing defects</li>
+      <li><b>Crest Factor</b> — Peak / RMS; detects early-stage shock events</li>
+      <li><b>FFT Peak Frequency</b> — dominant fault frequency in the spectrum</li>
+      <li><b>Band Energies</b> — spectral energy in low / mid / high frequency bands</li>
+      <li><b>Spectral Entropy</b> — signal complexity indicator</li>
+    </ul>
+
+    <h3>2.3 Health Scoring Model</h3>
+    <p>{{ health_scoring_description }}</p>
+    <p>The Asset Health Score (AHS) is a weighted combination of normalised feature scores:</p>
+    <ul>
+      <li>RMS score: 25%</li>
+      <li>Kurtosis score: 25%</li>
+      <li>Crest Factor score: 20%</li>
+      <li>Anomaly detector score (Isolation Forest): 30%</li>
+    </ul>
+
+    <h3>2.4 Fault Classification</h3>
+    <p>A Random Forest classifier ({{ classifier_estimators }} trees) was trained on labelled historical data to identify fault types. Training accuracy: {{ train_accuracy }}%.</p>
+  </section>
+
+  <!-- 3. RESULTS -->
+  <section id="results">
+    <h2>3. Results & Findings</h2>
+
+    <h3>3.1 Fleet Health Overview</h3>
+    <div class="plot-grid">
+      <figure class="plot-box">
+        <img src="plots/health_distribution.png" alt="Health Score Distribution"/>
+        <figcaption>Figure 1 — Asset Health Score Distribution</figcaption>
+      </figure>
+      <figure class="plot-box">
+        <img src="plots/fault_distribution.png" alt="Fault Type Distribution"/>
+        <figcaption>Figure 2 — Fault Type Distribution</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:28px;">3.2 Vibration Signal Analysis</h3>
+    <div class="plot-grid">
+      <figure class="plot-box">
+        <img src="plots/waveform.png" alt="Vibration Waveform"/>
+        <figcaption>Figure 3 — Time-domain Vibration Waveform</figcaption>
+      </figure>
+      <figure class="plot-box">
+        <img src="plots/fft_spectrum.png" alt="FFT Spectrum"/>
+        <figcaption>Figure 4 — Frequency Spectrum (FFT)</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:28px;">3.3 Asset Health Table</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Asset ID</th><th>Asset Name</th><th>Location</th>
+          <th>Health Score</th><th>Status</th><th>Fault Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in asset_table %}
+        <tr>
+          <td>{{ row.asset_id }}</td>
+          <td>{{ row.asset_name }}</td>
+          <td>{{ row.location }}</td>
+          <td>{{ row.health_score }}</td>
+          <td><span class="badge badge-{{ row.health_status | lower }}">{{ row.health_status }}</span></td>
+          <td>{{ row.fault_type }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. KEY FINDINGS -->
+  <section id="findings">
+    <h2>4. Key Findings</h2>
+    {% for finding in findings %}
+    <div class="finding {{ finding.severity | lower }}">
+      <h4>{{ finding.title }}</h4>
+      <p>{{ finding.description }}</p>
+    </div>
+    {% endfor %}
+  </section>
+
+  <!-- 5. RECOMMENDATIONS -->
+  <section id="recommendations">
+    <h2>5. Maintenance Recommendations</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th><th>Asset</th><th>Action Required</th><th>Due Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rec in recommendations %}
+        <tr>
+          <td><span class="badge badge-{{ rec.priority | lower }}">{{ rec.priority }}</span></td>
+          <td>{{ rec.asset_name }}</td>
+          <td>{{ rec.action }}</td>
+          <td>{{ rec.due_date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. CONCLUSION -->
+  <section id="conclusion">
+    <h2>6. Conclusion</h2>
+    <p>{{ conclusion }}</p>
+  </section>
+
+</div>
+
+<footer>
+  {{ company }} · Condition Monitoring Technical Report · {{ report_date }} · Report ID: {{ report_id }}
+</footer>
+
+</body>
+</html>

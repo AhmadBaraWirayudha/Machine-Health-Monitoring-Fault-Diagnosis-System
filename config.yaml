@@ -1,0 +1,72 @@
+project:
+  name: "Machine Health Monitoring & Fault Diagnosis System"
+  version: "1.0.0"
+  author: "Bara"
+
+database:
+  type: sqlite
+  path: data/processed/cmdb.sqlite
+
+paths:
+  raw_data:       data/raw/
+  processed_data: data/processed/
+  external_data:  data/external/
+  models:         models/
+  reports:        reports/
+  plots:          reports/plots/
+
+datasets:
+  ai4i_url: "https://archive.ics.uci.edu/ml/machine-learning-databases/00601/ai4i2020.csv"
+  ai4i_filename: "ai4i2020.csv"
+
+signal:
+  sampling_rate: 25600       # Hz — adjust to your dataset
+  window_size: 512           # samples per segment
+  overlap: 0.5               # 50% overlap between windows
+
+features:
+  time_domain:
+    - rms
+    - kurtosis
+    - crest_factor
+    - peak_to_peak
+    - skewness
+    - variance
+  frequency_domain:
+    - fft_peak_freq
+    - fft_peak_amplitude
+    - band_energy_low
+    - band_energy_mid
+    - band_energy_high
+    - spectral_entropy
+
+model:
+  classifier:
+    type: random_forest
+    n_estimators: 100
+    max_depth: 10
+    random_state: 42
+    test_size: 0.2
+  anomaly:
+    type: isolation_forest
+    contamination: 0.05
+    random_state: 42
+
+health_score:
+  weights:
+    rms: 0.25
+    kurtosis: 0.25
+    crest_factor: 0.20
+    anomaly_score: 0.30
+  thresholds:
+    good:      80
+    warning:   60
+    degraded:  40
+    critical:  0
+
+reporting:
+  company: "CBM Engineering Portfolio"
+  logo: ""
+  output_formats:
+    - html
+    - csv
