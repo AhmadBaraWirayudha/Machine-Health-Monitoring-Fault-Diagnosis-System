@@ -1,0 +1,123 @@
+# =============================================================
+# .gitignore — Machine Health Monitoring & Fault Diagnosis System
+# =============================================================
+
+# ── Python ────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Virtual environments ──────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+
+# ── Data files (large / generated) ───────────────────────────
+data/raw/
+data/processed/
+data/external/
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+
+# ── Trained models ────────────────────────────────────────────
+models/*.joblib
+models/*.pkl
+models/*.h5
+models/*.pt
+models/*.onnx
+!models/.gitkeep
+
+# ── Reports and plots ─────────────────────────────────────────
+reports/plots/
+reports/r_plots/
+reports/technical_report.html
+!reports/.gitkeep
+!reports/plots/.gitkeep
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Environment variables ─────────────────────────────────────
+.env
+.env.local
+.env.*.local
+# Keep the example:
+!.env.example
+
+# ── Jupyter Notebooks ────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Testing & coverage ───────────────────────────────────────
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# ── IDEs ─────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Docker ────────────────────────────────────────────────────
+.docker/
+
+# ── MATLAB ────────────────────────────────────────────────────
+matlab/*.asv
+matlab/slprj/
+
+# ── R ─────────────────────────────────────────────────────────
+.Rhistory
+.RData
+.Rproj.user/
+
+# ── Power BI ─────────────────────────────────────────────────
+powerbi/*.pbix
+
+# ── OS artefacts ─────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# ── Temp files ────────────────────────────────────────────────
+*.tmp
+*.bak
+*.orig
+*.rej
